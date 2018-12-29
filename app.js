@@ -12,6 +12,23 @@ const app = express();
 
 app.use(bodyParser.json());
 
+//function to populate manually
+//returning a user object with overwritten _id -> object by String
+//basically I can fetch the user by id
+//"manual populational approach"
+const user = userId => {
+  return User.findById(userId)
+    .then(user => {
+      return {
+        ...user._doc,
+        _id: user.id
+      };
+    })
+    .catch(err => {
+      throw err;
+    });
+};
+
 app.use(
   "/graphql",
   graphqlHttp({
@@ -61,16 +78,12 @@ app.use(
     rootValue: {
       events: () => {
         return Event.find() //async opp so wait for result, do not return before is resolve
-          .populate("creator")
           .then(events => {
             return events.map(event => {
               return {
                 ...event._doc, //avoiding all metadata from result
                 _id: event.id, //take id from root already in String
-                creator: {
-                  ...event._doc.creator._doc, //same here _id is not a String
-                  _id: event._doc.creator.id //so, to take creator id from root
-                }
+                creator: user.bind(this, event._doc.creator) // insted populate automatically creator field i will take creator id, which is put here automatically and pass it to the user "populate manually" function, which then return me all user info
               };
             });
           })
