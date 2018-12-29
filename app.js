@@ -22,12 +22,14 @@ app.use(
         description: String!
         price: Float!
         date: String!
+        creator: User!
       }
 
       type User {
         _id: ID
         email: String!
-        password: String  
+        password: String
+        createdEvents: [Event!]
       }
 
       input EventInput {
@@ -59,9 +61,17 @@ app.use(
     rootValue: {
       events: () => {
         return Event.find() //async opp so wait for result, do not return before is resolve
+          .populate("creator")
           .then(events => {
             return events.map(event => {
-              return { ...event._doc, _id: event.id }; //avoiding all metadata from result
+              return {
+                ...event._doc, //avoiding all metadata from result
+                _id: event.id, //take id from root already in String
+                creator: {
+                  ...event._doc.creator._doc, //same here _id is not a String
+                  _id: event._doc.creator.id //so, to take creator id from root
+                }
+              };
             });
           })
           .catch(err => {
