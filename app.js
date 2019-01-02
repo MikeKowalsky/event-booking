@@ -6,9 +6,12 @@ const mongoose = require("mongoose");
 const graphQLSchema = require("./grahql/schema/index");
 const graphQLResolvers = require("./grahql/resolvers/index");
 
+const isAuth = require("./middleware/is-auth");
+
 const app = express();
 
 app.use(bodyParser.json());
+app.use(isAuth);
 
 app.use(
   "/graphql",
@@ -23,7 +26,8 @@ mongoose
   .connect(
     `mongodb+srv://${process.env.MONGO_USER}:${
       process.env.MONGO_PASSWORD
-    }@cluster0-idsge.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`
+    }@cluster0-idsge.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,
+    { useNewUrlParser: true }
   )
   .then(() => {
     app.listen(3000);
