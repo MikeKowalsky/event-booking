@@ -1,2 +1,4 @@
 /node_modules
-nodemone.json
+/frontend/node_modules
+
+nodemon.json
