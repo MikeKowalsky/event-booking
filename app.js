@@ -7,10 +7,12 @@ const graphQLSchema = require("./grahql/schema/index");
 const graphQLResolvers = require("./grahql/resolvers/index");
 
 const isAuth = require("./middleware/is-auth");
+const cors = require("./middleware/cors");
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors);
 app.use(isAuth);
 
 app.use(
