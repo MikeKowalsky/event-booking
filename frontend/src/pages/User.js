@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import UserContext from "../context/user-context";
 
 import "./User.css";
 
@@ -6,6 +7,8 @@ class UserPage extends Component {
   state = {
     isLogin: true
   };
+
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);
@@ -66,7 +69,16 @@ class UserPage extends Component {
         }
         return res.json();
       })
-      .then(resData => console.log(resData))
+      .then(resData => {
+        console.log(resData);
+        if (resData.data.login.token) {
+          this.context.login(
+            resData.data.login.token,
+            resData.data.login.tokenExpiration,
+            resData.data.login.userId
+          );
+        }
+      })
       .catch(err => console.log(err));
   };
 
