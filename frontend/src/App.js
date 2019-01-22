@@ -20,7 +20,7 @@ class App extends Component {
   };
 
   logout = () => {
-    this.SVGElementInstanceList({ token: null, userId: null });
+    this.setState({ token: null, userId: null });
   };
 
   render() {
@@ -38,10 +38,9 @@ class App extends Component {
             <MainNavigation />
             <main className="main-content">
               <Switch>
-                {!this.state.token && <Redirect from="/" to="/auth" exact />}
                 {this.state.token && <Redirect from="/" to="/events" exact />}
                 {this.state.token && (
-                  <Redirect from="/auth" to="/events" exact />
+                  <Redirect from="/user" to="/events" exact />
                 )}
                 {!this.state.token && (
                   <Route path="/user" component={UserPage} />
@@ -50,6 +49,7 @@ class App extends Component {
                 {this.state.token && (
                   <Route path="/bookings" component={BookingsPage} />
                 )}
+                {!this.state.token && <Redirect to="/user" exact />}
               </Switch>
             </main>
           </UserContext.Provider>
