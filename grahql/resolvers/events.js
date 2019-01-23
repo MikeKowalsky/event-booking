@@ -27,7 +27,8 @@ module.exports = {
     try {
       const result = await event.save();
       createdEvent = transformEvent(result);
-      const creator = await User.findById("5c27dfdd40d6163e5638599b");
+      const creator = await User.findById("5c3a4aa708572d067fd48d5f");
+
       if (!creator) {
         throw new Error("User not found.");
       }
