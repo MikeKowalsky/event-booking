@@ -35,7 +35,7 @@ const user = async userId => {
       ...user._doc,
       _id: user.id,
       // passowrd: null, // should be here as well
-      createdEvents: eventLoader.load.bind(this, user._doc.createdEvents)
+      createdEvents: () => eventLoader.loadMany.bind(user._doc.createdEvents)
     };
   } catch (err) {
     throw err;
