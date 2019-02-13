@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Spinner from "../components/Spinner/Spinner";
 import BookingList from "../components/Bookings/BookingList/BookingList";
 import BookingsChart from "../components/Bookings/BookingsChart/BookingsChart";
+import BookingsControls from "../components/Bookings/BookingsControls/BookingsControls";
 
 import UserContext from "../context/user-context";
 
@@ -119,14 +120,10 @@ class BookingsPage extends Component {
     if (!this.state.isLoading) {
       content = (
         <React.Fragment>
-          <div>
-            <button onClick={this.changeOutputTypeHandler.bind(this, "list")}>
-              List
-            </button>
-            <button onClick={this.changeOutputTypeHandler.bind(this, "chart")}>
-              Chart
-            </button>
-          </div>
+          <BookingsControls
+            onChange={this.changeOutputTypeHandler}
+            outputType={this.state.outputType}
+          />
           <div>
             {this.state.outputType === "list" ? (
               <BookingList
